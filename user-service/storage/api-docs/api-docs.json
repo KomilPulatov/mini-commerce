@@ -11,8 +11,8 @@
     },
     "servers": [
         {
-            "url": "http://user-service.lc/api",
-            "description": "Local Development Server (OpenServer)"
+            "url": "https://user-service.lc/api",
+            "description": "Local Development Server (OpenServer HTTPS)"
         },
         {
             "url": "http://localhost:8000/api",
