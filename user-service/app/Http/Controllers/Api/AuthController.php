@@ -15,15 +15,17 @@ class AuthController extends Controller
 {
     public function login(LoginRequest $request): JsonResponse
     {
-        $user = User::where('email', $request->email)->first();
+        $credentials = $request->validated();
 
-        if (! $user || ! Hash::check($request->password, $user->password)) {
+        $user = User::where('email', $credentials['email'])->first();
+
+        if (! $user || ! Hash::check($credentials['password'], $user->password)) {
             throw ValidationException::withMessages([
                 'email' => [__('auth.failed')],
             ]);
         }
 
-        $deviceName = $request->device_name ?? 'auth-token';
+        $deviceName = $credentials['device_name'] ?? 'auth-token';
         $token = $user->createToken($deviceName)->plainTextToken;
 
         return response()->json([
