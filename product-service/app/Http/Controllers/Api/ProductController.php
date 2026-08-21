@@ -30,27 +30,27 @@ class ProductController extends Controller
         return new ProductResource($product);
     }
 
-    public function show(int $id): ProductResource
+    public function show(int $product): ProductResource
     {
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail($product);
 
         return new ProductResource($product);
     }
 
     public function update(
         UpdateProductRequest $request,
-        int $id
+        int $product
     ): ProductResource {
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail($product);
 
         $product->update($request->validated());
 
         return new ProductResource($product->fresh());
     }
 
-    public function destroy(int $id): JsonResponse
+    public function destroy(int $product): JsonResponse
     {
-        $product = Product::findOrFail($id);
+        $product = Product::findOrFail($product);
 
         $product->delete();
 
