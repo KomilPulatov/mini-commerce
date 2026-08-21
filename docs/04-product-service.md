@@ -11,7 +11,7 @@ Own product/catalog information and inventory state.
 - description
 - price
 - stock
-- status
+- is_active
 - created_at
 - updated_at
 
@@ -28,7 +28,7 @@ DELETE /api/products/{id}
 Support:
 - search
 - price filtering
-- status filtering
+- activeness filtering
 - sorting
 - pagination
 
