@@ -3,32 +3,56 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
+use App\Http\Requests\StoreProductRequest;
+use App\Http\Requests\UpdateProductRequest;
+use App\Http\Resources\ProductResource;
+use App\Models\Product;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ProductController extends Controller
 {
-    public function index()
+    public function index(): AnonymousResourceCollection
     {
+        $products = Product::query()
+            ->where('is_active', true)
+            ->latest()
+            ->paginate();
 
+        return ProductResource::collection($products);
     }
 
-    public function store(Request $request)
+    public function store(StoreProductRequest $request): ProductResource
     {
-        // Logic to create a new product
+        $product = Product::create($request->validated());
+
+        return new ProductResource($product);
     }
 
-    public function show($id)
+    public function show(int $id): ProductResource
     {
-        // Logic to retrieve and return a specific product by ID
+        $product = Product::findOrFail($id);
+
+        return new ProductResource($product);
     }
 
-    public function update(Request $request, $id)
-    {
-        // Logic to update an existing product by ID
+    public function update(
+        UpdateProductRequest $request,
+        int $id
+    ): ProductResource {
+        $product = Product::findOrFail($id);
+
+        $product->update($request->validated());
+
+        return new ProductResource($product->fresh());
     }
 
-    public function destroy($id)
+    public function destroy(int $id): JsonResponse
     {
-        // Logic to delete a specific product by ID
+        $product = Product::findOrFail($id);
+
+        $product->delete();
+
+        return response()->json(null, 204);
     }
 }
