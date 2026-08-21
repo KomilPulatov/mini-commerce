@@ -19,7 +19,7 @@ class ProductQuery
             $query->where(
                 'name',
                 'like',
-                '%' . $this->filters['search'] . '%'
+                '%'.$this->filters['search'].'%'
             );
         }
 

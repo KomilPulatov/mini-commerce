@@ -4,7 +4,8 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
-//Todo: refactor
+
+// Todo: refactor
 class IndexProductRequest extends FormRequest
 {
     public function authorize(): bool
