@@ -5,7 +5,7 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);
 
-test('guest can register a new user', function () {
+it('allows a guest to register a new user', function () {
     $payload = [
         'name' => 'Alice Smith',
         'email' => 'alice@example.com',
@@ -15,7 +15,7 @@ test('guest can register a new user', function () {
 
     $response = $this->postJson('/api/users', $payload);
 
-    $response->assertStatus(201)
+    $response->assertCreated()
         ->assertJson([
             'data' => [
                 'name' => 'Alice Smith',
@@ -23,15 +23,18 @@ test('guest can register a new user', function () {
             ],
         ]);
 
-    $this->assertDatabaseHas('users', ['email' => 'alice@example.com']);
+    $this->assertDatabaseHas('users', [
+        'email' => 'alice@example.com',
+    ]);
 });
 
-test('authenticated user can view user details', function () {
+it('allows an authenticated user to view their own details', function () {
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user, 'sanctum')->getJson("/api/users/{$user->id}");
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson("/api/users/{$user->id}");
 
-    $response->assertStatus(200)
+    $response->assertOk()
         ->assertJson([
             'data' => [
                 'id' => $user->id,
@@ -41,14 +44,17 @@ test('authenticated user can view user details', function () {
         ]);
 });
 
-test('authenticated user can update profile', function () {
-    $user = User::factory()->create(['name' => 'Old Name']);
-
-    $response = $this->actingAs($user, 'sanctum')->patchJson("/api/users/{$user->id}", [
-        'name' => 'New Name',
+it('allows an authenticated user to update their profile', function () {
+    $user = User::factory()->create([
+        'name' => 'Old Name',
     ]);
 
-    $response->assertStatus(200)
+    $response = $this->actingAs($user, 'sanctum')
+        ->patchJson("/api/users/{$user->id}", [
+            'name' => 'New Name',
+        ]);
+
+    $response->assertOk()
         ->assertJson([
             'data' => [
                 'id' => $user->id,
@@ -56,14 +62,21 @@ test('authenticated user can update profile', function () {
             ],
         ]);
 
-    $this->assertDatabaseHas('users', ['id' => $user->id, 'name' => 'New Name']);
+    $this->assertDatabaseHas('users', [
+        'id' => $user->id,
+        'name' => 'New Name',
+    ]);
 });
 
-test('authenticated user can delete user', function () {
+it('allows an authenticated user to delete their account', function () {
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user, 'sanctum')->deleteJson("/api/users/{$user->id}");
+    $response = $this->actingAs($user, 'sanctum')
+        ->deleteJson("/api/users/{$user->id}");
 
-    $response->assertStatus(204);
-    $this->assertDatabaseMissing('users', ['id' => $user->id]);
+    $response->assertNoContent();
+
+    $this->assertDatabaseMissing('users', [
+        'id' => $user->id,
+    ]);
 });

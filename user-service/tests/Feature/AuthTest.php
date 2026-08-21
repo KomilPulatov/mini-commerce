@@ -6,16 +6,16 @@ use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
 
-test('swagger documentation ui is accessible', function () {
+it('serves the Swagger documentation UI', function () {
     $response = $this->get('/docs');
 
-    $response->assertStatus(200);
+    $response->assertOk();
 });
 
-test('openapi specification json is accessible and valid', function () {
-    $response = $this->get('/docs/spec');
+it('serves a valid OpenAPI specification', function () {
+    $response = $this->getJson('/docs/spec');
 
-    $response->assertStatus(200)
+    $response->assertOk()
         ->assertJson([
             'openapi' => '3.0.3',
             'info' => [
@@ -25,7 +25,7 @@ test('openapi specification json is accessible and valid', function () {
         ]);
 });
 
-test('user can authenticate and receive a token', function () {
+it('authenticates a user and returns an access token', function () {
     $user = User::factory()->create([
         'email' => 'test@example.com',
         'password' => Hash::make('password123'),
@@ -36,20 +36,27 @@ test('user can authenticate and receive a token', function () {
         'password' => 'password123',
     ]);
 
-    $response->assertStatus(200)
+    $response->assertOk()
         ->assertJsonStructure([
             'token',
             'token_type',
-            'user' => ['id', 'name', 'email', 'created_at', 'updated_at'],
+            'user' => [
+                'id',
+                'name',
+                'email',
+                'created_at',
+                'updated_at',
+            ],
         ]);
 });
 
-test('authenticated user can fetch own profile', function () {
+it('allows an authenticated user to retrieve their own profile', function () {
     $user = User::factory()->create();
 
-    $response = $this->actingAs($user, 'sanctum')->getJson('/api/me');
+    $response = $this->actingAs($user, 'sanctum')
+        ->getJson('/api/me');
 
-    $response->assertStatus(200)
+    $response->assertOk()
         ->assertJson([
             'data' => [
                 'id' => $user->id,
@@ -58,13 +65,14 @@ test('authenticated user can fetch own profile', function () {
         ]);
 });
 
-test('authenticated user can logout', function () {
+it('allows an authenticated user to log out', function () {
     $user = User::factory()->create();
     $token = $user->createToken('test-token');
 
-    $response = $this->withToken($token->plainTextToken)->postJson('/api/logout');
+    $response = $this->withToken($token->plainTextToken)
+        ->postJson('/api/logout');
 
-    $response->assertStatus(200)
+    $response->assertOk()
         ->assertJson([
             'message' => 'Logged out successfully.',
         ]);

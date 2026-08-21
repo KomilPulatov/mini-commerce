@@ -12,11 +12,10 @@ use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class ProductController extends Controller
 {
-    public function index(): AnonymousResourceCollection
-    {
-        $products = Product::query()
-            ->where('is_active', true)
-            ->latest()
+    public function index(
+        IndexProductRequest $request
+    ): AnonymousResourceCollection {
+        $products = (new ProductQuery($request->validated()))
             ->paginate();
 
         return ProductResource::collection($products);

@@ -1,6 +1,6 @@
 <?php
 
-test('root redirects to swagger documentation', function () {
+it('redirects to swagger documentation', function () {
     $response = $this->get('/');
 
     $response->assertRedirect('/docs');
