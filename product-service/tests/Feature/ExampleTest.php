@@ -1,7 +1,7 @@
 <?php
 
-test('the application returns a successful response', function () {
-    $response = $this->get('/');
+it('serves the Scribe documentation', function () {
+    $response = $this->get('/docs');
 
-    $response->assertStatus(200);
+    $response->assertOk();
 });
