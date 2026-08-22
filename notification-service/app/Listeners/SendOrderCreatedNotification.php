@@ -7,8 +7,9 @@ use App\Enums\NotificationChannelType;
 use App\Events\OrderCreated;
 use App\Services\NotificationChannelResolver;
 use App\Services\NotificationService;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendOrderCreatedNotification
+class SendOrderCreatedNotification implements ShouldQueue
 {
     public function __construct(
         private readonly NotificationService $notificationService,

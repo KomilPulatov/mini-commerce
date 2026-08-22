@@ -7,8 +7,9 @@ use App\Enums\NotificationChannelType;
 use App\Events\PaymentCompleted;
 use App\Services\NotificationChannelResolver;
 use App\Services\NotificationService;
+use Illuminate\Contracts\Queue\ShouldQueue;
 
-class SendPaymentCompletedNotification
+class SendPaymentCompletedNotification implements ShouldQueue
 {
     public function __construct(
         private readonly NotificationService $notificationService,
