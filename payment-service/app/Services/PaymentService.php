@@ -30,6 +30,7 @@ class PaymentService
             'order_id' => $data->orderId,
             'amount' => $data->amount,
             'status' => PaymentStatus::PENDING,
+            'idempotency_key' => $data->idempotencyKey,
         ]);
 
         try {

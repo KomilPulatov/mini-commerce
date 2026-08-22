@@ -18,7 +18,7 @@ it('processes a successful payment', function () {
         'amount' => 100.00,
     ]);
 
-    $response->assertOk();
+    $response->assertCreated();
 
     $this->assertDatabaseHas('payments', [
         'order_id' => 1,
@@ -39,7 +39,7 @@ it('marks the payment as failed when the gateway fails', function () {
         'amount' => 100.00,
     ]);
 
-    $response->assertOk();
+    $response->assertCreated();
 
     $this->assertDatabaseHas('payments', [
         'order_id' => 1,
@@ -121,7 +121,7 @@ it('returns the existing payment for the same idempotency key', function () {
             'amount' => 100,
         ]);
 
-    $firstResponse->assertOk();
+    $firstResponse->assertCreated();
 
     $secondResponse = $this->withHeaders($headers)
         ->postJson('/api/payments', [
@@ -162,7 +162,7 @@ it('uses the PaymentGateway abstraction', function () {
         'amount' => 100,
     ]);
 
-    $response->assertOk();
+    $response->assertCreated();
 
     $this->assertDatabaseHas('payments', [
         'order_id' => 1,

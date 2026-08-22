@@ -6,23 +6,10 @@ use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
 
-it('serves the Swagger documentation UI', function () {
+it('serves the Scribe documentation', function () {
     $response = $this->get('/docs');
 
     $response->assertOk();
-});
-
-it('serves a valid OpenAPI specification', function () {
-    $response = $this->getJson('/docs/spec');
-
-    $response->assertOk()
-        ->assertJson([
-            'openapi' => '3.0.3',
-            'info' => [
-                'title' => 'User Service API',
-                'version' => '1.0.0',
-            ],
-        ]);
 });
 
 it('authenticates a user and returns an access token', function () {
