@@ -1,7 +1,7 @@
 <?php
 
-it('serves the Scribe documentation', function () {
-    $response = $this->get('/docs');
+it('redirects to swagger documentation', function () {
+    $response = $this->get('/');
 
-    $response->assertOk();
+    $response->assertRedirect('/docs');
 });
