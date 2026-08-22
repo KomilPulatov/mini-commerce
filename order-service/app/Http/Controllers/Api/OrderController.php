@@ -13,8 +13,7 @@ class OrderController extends Controller
 {
     public function __construct(
         private OrderService $orderService,
-    ) {
-    }
+    ) {}
 
     public function index(Request $request)
     {

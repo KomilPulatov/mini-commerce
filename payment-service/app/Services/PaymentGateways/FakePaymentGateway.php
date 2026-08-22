@@ -15,7 +15,7 @@ class FakePaymentGateway implements PaymentGateway
         return match (config('payment.fake_result')) {
             'success' => new PaymentResult(
                 successful: true,
-                transactionId: 'fake_' . uniqid(),
+                transactionId: 'fake_'.uniqid(),
             ),
 
             'failure' => new PaymentResult(

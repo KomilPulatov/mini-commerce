@@ -7,7 +7,6 @@ use App\Data\NotificationData;
 use App\Enums\NotificationStatus;
 use App\Models\Notification;
 use Illuminate\Support\Facades\DB;
-use RuntimeException;
 
 class NotificationService
 {

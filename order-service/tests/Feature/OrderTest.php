@@ -3,10 +3,12 @@
 use App\Enums\OrderStatus;
 use App\Events\OrderCreated;
 use App\Models\Order;
+use App\Services\OrderService;
 use App\Services\ProductServiceClient;
 use App\Services\UserServiceClient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Event;
+use Illuminate\Validation\ValidationException;
 
 uses(RefreshDatabase::class);
 
@@ -36,7 +38,7 @@ it('creates an order', function () {
 
     Event::fake();
 
-    $order = app(\App\Services\OrderService::class)->createOrder(
+    $order = app(OrderService::class)->createOrder(
         1,
         [
             [
@@ -69,7 +71,7 @@ it('does not create an order for a non existing user', function () {
 
     $this->app->instance(UserServiceClient::class, $userService);
 
-    expect(fn () => app(\App\Services\OrderService::class)->createOrder(
+    expect(fn () => app(OrderService::class)->createOrder(
         999,
         [
             [
@@ -77,7 +79,7 @@ it('does not create an order for a non existing user', function () {
                 'quantity' => 1,
             ],
         ],
-    ))->toThrow(\Illuminate\Validation\ValidationException::class);
+    ))->toThrow(ValidationException::class);
 
     expect(Order::count())->toBe(0);
 });
@@ -100,7 +102,7 @@ it('does not create an order when a product does not exist', function () {
     $this->app->instance(UserServiceClient::class, $userService);
     $this->app->instance(ProductServiceClient::class, $productService);
 
-    expect(fn () => app(\App\Services\OrderService::class)->createOrder(
+    expect(fn () => app(OrderService::class)->createOrder(
         1,
         [
             [
@@ -108,7 +110,7 @@ it('does not create an order when a product does not exist', function () {
                 'quantity' => 1,
             ],
         ],
-    ))->toThrow(\Illuminate\Validation\ValidationException::class);
+    ))->toThrow(ValidationException::class);
 
     expect(Order::count())->toBe(0);
 });
@@ -137,7 +139,7 @@ it('does not create an order with an inactive product', function () {
     $this->app->instance(UserServiceClient::class, $userService);
     $this->app->instance(ProductServiceClient::class, $productService);
 
-    expect(fn () => app(\App\Services\OrderService::class)->createOrder(
+    expect(fn () => app(OrderService::class)->createOrder(
         1,
         [
             [
@@ -145,7 +147,7 @@ it('does not create an order with an inactive product', function () {
                 'quantity' => 1,
             ],
         ],
-    ))->toThrow(\Illuminate\Validation\ValidationException::class);
+    ))->toThrow(ValidationException::class);
 
     expect(Order::count())->toBe(0);
 });
@@ -175,7 +177,7 @@ it('calculates the order total correctly', function () {
     $this->app->instance(UserServiceClient::class, $userService);
     $this->app->instance(ProductServiceClient::class, $productService);
 
-    $order = app(\App\Services\OrderService::class)->createOrder(
+    $order = app(OrderService::class)->createOrder(
         1,
         [
             [

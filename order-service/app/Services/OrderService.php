@@ -13,8 +13,7 @@ class OrderService
     public function __construct(
         private UserServiceClient $userService,
         private ProductServiceClient $productService,
-    ) {
-    }
+    ) {}
 
     public function createOrder(
         int $userId,

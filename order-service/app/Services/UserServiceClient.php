@@ -11,7 +11,7 @@ class UserServiceClient
     {
         $response = Http::timeout(3)
             ->get(
-                config('services.user_service.url') . "/api/users/{$userId}"
+                config('services.user_service.url')."/api/users/{$userId}"
             );
 
         if ($response->status() === 404) {

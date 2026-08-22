@@ -11,7 +11,7 @@ class ProductServiceClient
     {
         $response = Http::timeout(3)
             ->get(
-                config('services.product_service.url') . '/api/products',
+                config('services.product_service.url').'/api/products',
                 [
                     'ids' => $productIds,
                 ]

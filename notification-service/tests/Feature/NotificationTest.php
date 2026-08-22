@@ -2,7 +2,6 @@
 
 use App\Enums\NotificationChannelType;
 use App\Enums\NotificationStatus;
-use App\Models\Notification;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 uses(RefreshDatabase::class);

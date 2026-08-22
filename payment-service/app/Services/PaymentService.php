@@ -6,7 +6,6 @@ use App\Contracts\PaymentGateway;
 use App\Data\CreatePaymentData;
 use App\Enums\PaymentStatus;
 use App\Models\Payment;
-use Illuminate\Support\Facades\DB;
 use RuntimeException;
 
 class PaymentService
