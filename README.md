@@ -1,4 +1,4 @@
-# Mini Commerce — Laravel Microservices Learning Project
+# Micro Service Commerce — Laravel Microservices Learning Project
 
 This repository is intentionally small. The goal is to evolve one system from a simple Laravel service into a small distributed system without unnecessary business complexity.
 
